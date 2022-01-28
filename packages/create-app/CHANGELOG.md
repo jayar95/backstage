@@ -1,5 +1,41 @@
 # @backstage/create-app
 
+## 0.4.16
+
+### Patch Changes
+
+- cef64b1561: Added `tokenManager` as a required property for the auth-backend `createRouter` function. This dependency is used to issue server tokens that are used by the `CatalogIdentityClient` when looking up users and their group membership during authentication.
+
+  These changes are **required** to `packages/backend/src/plugins/auth.ts`:
+
+  ```diff
+  export default async function createPlugin({
+    logger,
+    database,
+    config,
+    discovery,
+  + tokenManager,
+  }: PluginEnvironment): Promise<Router> {
+    return await createRouter({
+      logger,
+      config,
+      database,
+      discovery,
+  +   tokenManager,
+    });
+  }
+  ```
+
+- e39d88bd84: Switched the `app` dependency in the backend to use a file target rather than version.
+
+  To apply this change to an existing app, make the following change to `packages/backend/package.json`:
+
+  ```diff
+     "dependencies": {
+  -    "app": "0.0.0",
+  +    "app": "file:../app",
+  ```
+
 ## 0.4.15
 
 ### Patch Changes
